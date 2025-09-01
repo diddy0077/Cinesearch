@@ -36,8 +36,8 @@ function App() {
           <Route path="/" element={<Home currentUser={currentUser} />} />
 
           {/* Other pages */}
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About currentUser={currentUser}/>} />
+          <Route path="/contact" element={<Contact currentUser={currentUser}/>} />
           <Route
             path="/login"
             element={
@@ -61,7 +61,7 @@ function App() {
               )
             }
           />
-          <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/movie/:id" element={<MovieDetails currentUser={currentUser}/>} />
         </Routes>
       </div>
     </MovieProvider>

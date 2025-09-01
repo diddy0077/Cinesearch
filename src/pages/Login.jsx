@@ -6,7 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 import Navbar2 from "../components/Navbar2";
 import Footer from "../components/Footer";
 
-export default function Login({ setCurrentUser }) {
+export default function Login({ currentUser, setCurrentUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -69,7 +69,7 @@ export default function Login({ setCurrentUser }) {
 
   return (
     <>
-      <Navbar2/>
+      <Navbar2 currentUser={currentUser}/>
     <div className="min-h-[85vh] flex items-center justify-center bg-gray-950 mx-4">
       <div className="bg-gray-900 p-8 rounded-2xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-indigo-400 mb-6">

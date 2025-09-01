@@ -151,7 +151,7 @@ function viewMore() {
 
   return (
     <div className="min-h-screen text-white">
-      <Navbar2 />
+      <Navbar2 currentUser={currentUser}/>
       {/* 🔹 Hero Banner */}
       {/* 🔹 Hero Banner */}
       <div

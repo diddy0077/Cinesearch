@@ -18,7 +18,6 @@ export default function AccountPage({ setCurrentUser }) {
   const [openEditForm, setOpenEditForm] = useState(false);
   const [openEditPassword, setOpenEditPassword] = useState(false);
   const [watchlist, setWatchlist] = useState([]);
-  const [selectedSearch, setSelectedSearch] = useState(null);
   const [saveMsg, setSaveMsg] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -182,7 +181,7 @@ export default function AccountPage({ setCurrentUser }) {
 
   return (
     <>
-      <Navbar2/>
+      <Navbar2 currentUser={currentUser}/>
     <div className="min-h-screen bg-gray-900 text-white p-6">
       {/* Profile Section */}
       <section className="bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col md:flex-row gap-6 items-center justify-between mb-8">

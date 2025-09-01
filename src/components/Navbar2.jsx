@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { User,Film } from "lucide-react";
 
 
-export default function Navbar2(currentUser) {
+export default function Navbar2({currentUser}) {
   const [openMenu, setOpenMenu] = useState(false)
   return (
     <>

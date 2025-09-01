@@ -3,10 +3,10 @@ import { Film, Search, Heart } from "lucide-react";
 import Navbar2 from "../components/Navbar2";
 import Footer from "../components/Footer";
 
-const About = () => {
+const About = ({currentUser}) => {
   return (
     <>
-      <Navbar2/>
+      <Navbar2 currentUser={currentUser}/>
     <div className="bg-gray-900 text-white min-h-screen py-16 px-6">
       <div className="max-w-5xl mx-auto text-center">
         {/* Header */}

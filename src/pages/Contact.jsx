@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 
 
 
-export default function Contact() {
+export default function Contact({currentUser}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -64,7 +64,7 @@ export default function Contact() {
 
   return (
     <>
-      <Navbar2/>
+      <Navbar2 currentUser={currentUser}/>
     <div className="min-h-screen bg-gray-900 text-white py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-10 text-center">
