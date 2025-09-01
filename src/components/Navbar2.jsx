@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { User,Film } from "lucide-react";
 
 
-export default function Navbar(currentUser) {
+export default function Navbar2(currentUser) {
   const [openMenu, setOpenMenu] = useState(false)
   return (
     <>
       {/* NAVBAR */}
       <nav className="w-full z-50 top-0 left-0 bg-gray-900/70 backdrop-blur-md shadow-md md:px-6 py-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between py-3 gap-4">
           {/* Brand + Favorite Button */}
           <div className="flex items-center gap-1 self-start ml-4">
             <Link to="/">
@@ -27,7 +27,7 @@ export default function Navbar(currentUser) {
         </div>
       
           <div
-            className="absolute top-4 right-6 cursor-pointer"
+            className="absolute top-7 right-6 cursor-pointer"
             onClick={() => setOpenMenu(true)}
           >
             <svg

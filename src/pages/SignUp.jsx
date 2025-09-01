@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase"; // <-- make sure you exported db in firebase.js
 import { doc, setDoc } from "firebase/firestore";
+import Navbar2 from "../components/Navbar2";
+import Footer from "../components/Footer";
 
 function SignUp() {
   const [firstname, setFirstname] = useState("");
@@ -80,6 +82,8 @@ function SignUp() {
   };
 
   return (
+    <>
+      <Navbar2/>
     <div className="flex items-center justify-center min-h-screen bg-gray-950 px-4 py-10">
       <div className="w-full max-w-md bg-gray-900 p-8 rounded-2xl shadow-lg">
         <h1 className="text-3xl font-bold text-white text-center mb-6">
@@ -143,7 +147,9 @@ function SignUp() {
           </Link>
         </p>
       </div>
-    </div>
+      </div>
+      <Footer />
+      </>
   );
 }
 

@@ -1,17 +1,9 @@
 // src/pages/Contact.jsx
 import React, { useState } from "react";
+import Navbar2 from "../components/Navbar2";
+import Footer from "../components/Footer";
 
-/**
- * Contact page for CineSearch
- * - Dark theme (bg-gray-900, text-white)
- * - CTA buttons use red-600; accents include indigo-600
- * - Two send options: EmailJS example (commented) or a placeholder fetch to your backend
- *
- * If you use EmailJS: npm install emailjs-com
- * then uncomment the import and send code and set your service/template/user ids.
- */
 
- // import emailjs from "emailjs-com";
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -25,7 +17,7 @@ export default function Contact() {
     if (!name.trim() || !email.trim() || !message.trim()) {
       return "Please fill in name, email and message.";
     }
-    // simple email check
+   
     const re = /\S+@\S+\.\S+/;
     if (!re.test(email)) return "Please enter a valid email address.";
     if (message.trim().length < 10) return "Message must be at least 10 characters.";
@@ -68,23 +60,11 @@ export default function Contact() {
       setTimeout(() => setStatus(null), 5000);
     }
 
-    /* 
-    // === OPTION B: EmailJS client-side example ===
-    // Uncomment import emailjs and the block below if you prefer EmailJS (not recommended for sensitive apps).
-    try {
-      const templateParams = { name, email, subject, message };
-      await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParams, "YOUR_USER_ID");
-      setStatus({ type: "success", msg: "Message sent — check your inbox!" });
-      setName(""); setEmail(""); setSubject(""); setMessage("");
-    } catch (err) {
-      setStatus({ type: "error", msg: "EmailJS failed. Try backend." });
-    } finally {
-      setSending(false);
-    }
-    */
   }
 
   return (
+    <>
+      <Navbar2/>
     <div className="min-h-screen bg-gray-900 text-white py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-10 text-center">
@@ -215,6 +195,8 @@ export default function Contact() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      <Footer />
+      </>
   );
 }

@@ -2,15 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { LogOut, Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { auth, db, storage } from "../firebase";
-import { signOut, updatePassword, updateProfile } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { auth, db } from "../firebase";
+import { signOut, updatePassword,deleteUser  } from "firebase/auth";
+import { doc, getDoc, updateDoc,deleteDoc } from "firebase/firestore";
 import MovieCard from "../components/MovieCard";
 import MovieModal from "../components/MovieModal";
+import Navbar2 from "../components/Navbar2";
+import Footer from "../components/Footer";
 
 export default function AccountPage({ setCurrentUser }) {
-  const [uploading, setUploading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -24,6 +24,7 @@ export default function AccountPage({ setCurrentUser }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [savedPassword, setSavedPassword] = useState("");
+  const [openDelete, setOpenDelete] = useState(false)
 
   const nav = useNavigate();
   const currentUser = auth.currentUser;
@@ -140,7 +141,8 @@ export default function AccountPage({ setCurrentUser }) {
 
       setUserData({ ...userData, firstname, lastname, email });
       setSaveMsg("✅ Changes saved!");
-      setTimeout(() => setOpenEditForm(false), 1500);
+      setTimeout(() =>
+        setOpenEditForm(false), 1500);
     } catch (err) {
       console.error("Error updating profile:", err);
       setError("Failed to update profile.");
@@ -156,7 +158,31 @@ export default function AccountPage({ setCurrentUser }) {
     );
   }
 
+  async function handleDeleteAccount() {
+
+  try {
+    // Delete user data in Firestore
+    await deleteDoc(doc(db, "users", currentUser.uid));
+
+    // Delete user in Firebase Auth
+    await deleteUser(currentUser);
+    setCurrentUser(null);
+    nav("/signup");
+    alert("Account deleted successfully!");
+  } catch (err) {
+    console.error("Account deletion failed:", err);
+    if (err.code === "auth/requires-recent-login") {
+      alert("Please login again to delete your account.");
+    } else {
+      alert("Failed to delete account. Try again.");
+    }
+  }
+}
+
+
   return (
+    <>
+      <Navbar2/>
     <div className="min-h-screen bg-gray-900 text-white p-6">
       {/* Profile Section */}
       <section className="bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col md:flex-row gap-6 items-center justify-between mb-8">
@@ -222,10 +248,8 @@ export default function AccountPage({ setCurrentUser }) {
           >
             Change Password
           </button>
-          <button className="w-full text-left px-4 py-3 bg-gray-800 rounded-lg hover:bg-gray-700 cursor-pointer">
-            Notification Preferences
-          </button>
-          <button className="w-full text-left px-4 py-3 bg-gray-800 rounded-lg hover:bg-gray-700 cursor-pointer">
+          
+          <button onClick={() => setOpenDelete(true)} className="w-full text-left px-4 py-3 bg-gray-800 rounded-lg hover:bg-gray-700 cursor-pointer">
             Delete Account
           </button>
         </div>
@@ -235,9 +259,16 @@ export default function AccountPage({ setCurrentUser }) {
       {openEditForm && (
         <div className="modal bg-black/60 fixed inset-0 flex items-center justify-center">
           <form
-            className="flex flex-col bg-gray-900 p-6 rounded-[1rem] mx-4"
+            className="flex flex-col bg-gray-900 p-6 rounded-[1rem] mx-4 relative"
             onSubmit={saveChanges}
-          >
+            >
+              <button
+              type="button"
+              onClick={() => setOpenEditForm(false)}
+              className="absolute top-4 right-4 text-white cursor-pointer"
+            >
+              ✕
+            </button>
             <h2 className="text-center text-2xl mb-4">Edit Profile</h2>
             <label className="mb-2">
               First Name:
@@ -286,11 +317,12 @@ export default function AccountPage({ setCurrentUser }) {
           <form
             onSubmit={changePassword}
             className="flex flex-col bg-gray-900 p-6 rounded-[1rem] mx-4 gap-4 relative"
-          >
+            >
+              <h1 className="text-center font-semibold text-lg mb-4">Create a New Password</h1>
             <button
               type="button"
               onClick={() => setOpenEditPassword(false)}
-              className="absolute top-4 right-4 text-red-600 cursor-pointer"
+              className="absolute top-4 right-4 text-white cursor-pointer"
             >
               ✕
             </button>
@@ -315,7 +347,7 @@ export default function AccountPage({ setCurrentUser }) {
               />
             </div>
             <button
-              className="my-2 bg-red-600 py-2 px-4 font-medium rounded-full cursor-pointer self-center"
+              className="my-2 text-sm bg-red-600 py-2 px-4 font-medium rounded-full cursor-pointer self-center active:scale-[0.95] transition duration-300"
               type="submit"
             >
               Change Password
@@ -325,6 +357,18 @@ export default function AccountPage({ setCurrentUser }) {
           </form>
         </div>
       )}
-    </div>
+
+      {openDelete && <div className="modal bg-black/60 fixed inset-0 flex items-center justify-center">
+        <div className="bg-gray-900 p-4 rounded-lg mx-4">
+          <p className="text-white text-center">Are you sure you want to delete your account? This cannot be undone.</p>
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <button onClick={() => setOpenDelete(false)} className="text-white my-2 bg-red-600 py-2 px-4 font-medium rounded-full cursor-pointer self-center transition duration-300 active:scale-[0.95]">Cancel</button>
+          <button onClick={handleDeleteAccount} className="text-white my-2 bg-indigo-600 py-2 px-4 font-medium rounded-full cursor-pointer self-center transition duration-300 active:scale-[0.95]">Confirm</button>
+          </div>
+        </div>
+      </div>}
+      </div>
+      <Footer/>
+      </>
   );
 }
