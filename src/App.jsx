@@ -9,6 +9,9 @@ import { auth } from "./firebase";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
+import MovieDetails from "./pages/MovieDetails.jsx"; // new file
+
+
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -58,6 +61,7 @@ function App() {
               )
             }
           />
+          <Route path="/movie/:id" element={<MovieDetails />} />
         </Routes>
       </div>
     </MovieProvider>

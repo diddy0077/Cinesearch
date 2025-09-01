@@ -209,34 +209,31 @@ export default function AccountPage({ setCurrentUser }) {
         </div>
       </section>
 
+     
       {/* Watchlist Section */}
-      <section className="mt-8 px-2 py-8">
-        <h1 className="text-white text-center text-3xl font-semibold mb-8">
-          Your Watchlist
-        </h1>
-        {watchlist.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {watchlist.map((movie) => (
-              <div key={movie.id} className="relative">
-                <MovieCard
-                  title={movie.original_title}
-                  poster={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                  rating={movie.vote_average ? movie.vote_average.toFixed(1) : "N/A"}
-                  onClick={() => setSelectedSearch(movie)}
-                  overview={movie.overview}
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-gray-400">
-            Your watchlist is empty. Start adding movies!
-          </p>
-        )}
-        {selectedSearch && (
-          <MovieModal movie={selectedSearch} onClose={() => setSelectedSearch(null)} />
-        )}
-      </section>
+<section className="mt-8 px-2 py-8">
+  <h1 className="text-white text-center text-3xl font-semibold mb-8">
+    Your Watchlist
+  </h1>
+  {watchlist.length > 0 ? (
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      {watchlist.map((movie) => (
+        <MovieCard
+          key={movie.id}
+          id={movie.id}   // ✅ important for navigation
+          title={movie.original_title}
+          poster={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+          rating={movie.vote_average ? movie.vote_average.toFixed(1) : "N/A"}
+        />
+      ))}
+    </div>
+  ) : (
+    <p className="text-center text-gray-400">
+      Your watchlist is empty. Start adding movies!
+    </p>
+  )}
+</section>
+
 
       {/* Account Settings */}
       <section>

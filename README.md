@@ -35,6 +35,17 @@ It allows users to search for movies, watch movie trailers, view details, and ma
 
 ### Account Page
 <img src="./public/account.png" alt="account page" width="800"/>
+
+### Account Page
+<img src="./public/1.png" alt="account page" width="800"/>
+
+<img src="./public/2.png" alt="account page" width="800"/>
+
+<img src="./public/3.png" alt="account page" width="800"/>
+
+<img src="./public/4.png" alt="account page" width="800"/>
+
+
 ---
 
 ## ⚡ Installation & Setup

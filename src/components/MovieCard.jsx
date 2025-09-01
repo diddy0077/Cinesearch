@@ -1,8 +1,13 @@
-export default function MovieCard({ title, poster, rating, onClick }) {
+import { useNavigate } from "react-router-dom";
+
+export default function MovieCard({ title, poster, rating, id }) {
+
+    const navigate = useNavigate();
+
   return (
     <div 
       className="relative group rounded-xl overflow-hidden shadow-2xl cursor-pointer transform hover:scale-105 transition-all duration-300"
-      onClick={onClick}
+      onClick={() => navigate(`/movie/${id}`)}
     >
       <img src={poster} alt={title} className="w-full h-auto object-cover"/>
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md opacity-0 group-hover:opacity-100 flex flex-col justify-end p-4 transition-opacity">
