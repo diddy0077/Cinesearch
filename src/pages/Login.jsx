@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase"; // we need db if we later fetch user profile
@@ -26,13 +26,15 @@ export default function Login({ currentUser, setCurrentUser }) {
   }
 
   const inputRef = useRef(null)
-  if (hasError) {
+  useEffect(() => {
+    if (hasError) {
     inputRef.current.classList.add('animate-shake')
   }
 
   setTimeout(() => {
     inputRef.current.classList.remove('animate-shake')
   }, 500);
+  }, [hasError])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -107,7 +109,7 @@ export default function Login({ currentUser, setCurrentUser }) {
             <label className="block text-gray-300 text-sm mb-2">Password</label>
               <input
               ref={inputRef}
-              type={showPassword ? 'password' : 'text'}
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={`w-full px-4 py-2 rounded-lg bg-gray-800 text-gray-200 border border-gray-700 focus:outline-none focus:ring-2 ${hasError ? 'focus:ring-red-500' : 'focus:ring-indigo-500'} transition duration-300`}

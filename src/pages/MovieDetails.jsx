@@ -402,7 +402,7 @@ function viewMore() {
           
             <button
               onClick={viewMore}
-              className="mt-6 flex items-center gap-2 px-6 py-3 bg-pink-600 text-white font-semibold rounded-full shadow-md hover:bg-pink-500 transition duration-300 cursor-pointer"
+              className="mt-6 flex items-center gap-2 px-4 py-2.5 bg-pink-600 text-white font-semibold rounded-full shadow-md hover:bg-pink-500 transition duration-300 cursor-pointer text-sm"
             >
              {viewMoreText}
               <svg

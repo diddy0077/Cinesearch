@@ -11,7 +11,7 @@ export default function Contact({currentUser}) {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
-  const [status, setStatus] = useState(null); // { type: 'success'|'error', msg: '' }
+  const [status, setStatus] = useState(null); 
 
   function validate() {
     if (!name.trim() || !email.trim() || !message.trim()) {
@@ -39,7 +39,7 @@ export default function Contact({currentUser}) {
     try {
       // === OPTION A: Send via your backend (recommended) ===
       // Replace /api/contact with your server endpoint or Firebase Function
-      const res = await fetch("/api/contact", {
+      const res = await fetch("https://formspree.io/f/xrbayzee", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, subject, message }),
@@ -87,7 +87,7 @@ export default function Contact({currentUser}) {
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+                  className="mt-1 w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
                   type="text"
                   placeholder="Your name"
                   required
@@ -99,7 +99,7 @@ export default function Contact({currentUser}) {
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                  className="mt-1 w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
                   type="email"
                   placeholder="you@example.com"
                   required
@@ -111,7 +111,7 @@ export default function Contact({currentUser}) {
                 <input
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="mt-1 w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                  className="mt-1 w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
                   type="text"
                   placeholder="Feature request, bug report..."
                 />
@@ -122,7 +122,7 @@ export default function Contact({currentUser}) {
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="mt-1 w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white resize-y min-h-[120px] focus:outline-none focus:ring-2 focus:ring-red-600"
+                  className="mt-1 w-full bg-gray-900 border border-gray-700 rounded px-4 py-3 text-white resize-y min-h-[120px] focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
                   placeholder="Tell us what’s up..."
                   required
                 />
@@ -141,7 +141,7 @@ export default function Contact({currentUser}) {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-60 transition font-semibold"
+                  className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-60 transition font-semibold cursor-pointer"
                 >
                   {sending ? "Sending..." : "Send Message"}
                 </button>
@@ -149,7 +149,7 @@ export default function Contact({currentUser}) {
                 <button
                   type="button"
                   onClick={() => { setName(""); setEmail(""); setSubject(""); setMessage(""); }}
-                  className="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 transition text-white"
+                  className="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 transition text-white cursor-pointer"
                 >
                   Clear
                 </button>
@@ -181,8 +181,8 @@ export default function Contact({currentUser}) {
                   <h4 className="text-sm text-gray-400">Follow</h4>
                   <div className="flex gap-3 mt-2">
                     <a href="#" className="text-gray-300 hover:text-red-400">Twitter</a>
-                    <a href="#" className="text-gray-300 hover:text-indigo-400">LinkedIn</a>
-                    <a href="#" className="text-gray-300 hover:text-gray-100">GitHub</a>
+                    <a href="https://www.linkedin.com/in/daniel-udeh-a03971350/" className="text-gray-300 hover:text-indigo-400">LinkedIn</a>
+                    <a href="https://github.com/diddy0077" className="text-gray-300 hover:text-gray-100">GitHub</a>
                   </div>
                 </div>
               </div>
