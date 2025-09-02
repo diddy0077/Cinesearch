@@ -13,6 +13,9 @@ import MovieCard from "../components/MovieCard";
 import { Link } from "lucide-react";
 import Footer from "../components/Footer";
 import RecommendedMovies from "../components/Recommended";
+import { collection, addDoc, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
+import Comment from "../components/Comment";
+
 
 export default function MovieDetails() {
   const { id } = useParams();
@@ -27,6 +30,11 @@ export default function MovieDetails() {
   const [similarMovies, setSimilarMovies] = useState([]);
   const [visibleCount, setVisibleCount] = useState(10);
   const [viewMoreText, setViewMoreText] = useState("View More")
+  const [commentText, setCommentText] = useState("");
+  const [comments, setComments] = useState([]);
+
+
+  
 
   useEffect(() => {
     fetch(
@@ -43,8 +51,8 @@ export default function MovieDetails() {
 
   // 🔹 Fetch movie details
   useEffect(() => {
-      setMovie(null);   // 🔹 clear old movie
-    setCast([]);      // 🔹 clear old cast
+      setMovie(null);   
+    setCast([]);     
     setCrew([]);
       setTrailerKey(null);
     setSimilarMovies([]);
@@ -87,6 +95,10 @@ export default function MovieDetails() {
         if (trailer) setTrailerKey(trailer.key);
       });
   }, [id]);
+
+  useEffect(() => {
+    console.log(id)
+  }, [id])
 
   // 🔹 Check watchlist
   useEffect(() => {
@@ -132,6 +144,66 @@ export default function MovieDetails() {
     }
   }
 
+  const handlePostComment = async (parentId = null) => {
+  if (!commentText.trim() || !currentUser) return;
+
+  try {
+    const commentsRef = collection(db, "movies", id, "comments");
+    const docRef = doc(db, "users", currentUser.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      await addDoc(commentsRef, {
+      text: commentText,
+      userId: currentUser.uid,
+      username: data.firstname || "Anonymous",
+      timestamp: serverTimestamp(),
+      parentId: parentId
+    });
+
+    setCommentText("");
+    }
+
+    
+  } catch (err) {
+    console.error("Error posting comment:", err);
+  }
+};
+
+  useEffect(() => {
+  if (!id) return;
+
+  const commentsRef = collection(db, "movies", id, "comments");
+  const q = query(commentsRef, orderBy("timestamp", "desc"));
+
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setComments(fetched);
+  });
+
+  return () => unsubscribe();
+}, [id]);
+
+  
+  function buildCommentTree(comments) {
+    let commentMap = {}
+    comments.forEach((comment) => {
+      return commentMap[comment.id] = {...comment, replies: []}
+    })
+    let tree = [];
+    comments.forEach((comment) => {
+      if (comment.parentId) {
+         commentMap[comment.parentId]?.replies.push(commentMap[comment.id]);
+      } else {
+        tree.push(commentMap[comment.id]);
+      }
+    })
+    return tree
+  }
+
+  const commentTree = buildCommentTree(comments);
+
+
 function viewMore() {
   if (visibleCount < similarMovies.length) {
     setVisibleCount((prev) => {
@@ -147,7 +219,10 @@ function viewMore() {
 }
 
 
-  if (!movie) return <p className="text-white p-6">Loading...</p>;
+  if (!movie) return <div className="flex items-center justify-center h-screen flex-col gap-0">
+                        <p className="w-8 h-8 border border-indigo-600 border-2 rounded-full border-t-transparent animate-spin"></p>
+    <p className="text-white p-4">{`Loading...`}</p>
+                     </div>;
 
   return (
     <div className="min-h-screen text-white">
@@ -191,14 +266,14 @@ function viewMore() {
               {trailerKey && (
                 <button
                   onClick={() => setOpen(true)}
-                  className="px-6 py-3 bg-red-600 rounded-full hover:bg-red-700 transition font-semibold cursor-pointer"
+                  className="px-4 text-sm py-3 bg-red-600 rounded-full hover:bg-red-700 transition font-semibold cursor-pointer"
                 >
                   ▶ Watch Trailer
                 </button>
               )}
               <button
                 onClick={toggleWatchlist}
-                className="px-6 py-3 bg-gray-800 rounded-full hover:bg-gray-700 transition font-semibold cursor-pointer"
+                className="px-4 py-3 text-sm bg-gray-800 rounded-full hover:bg-gray-700 transition font-semibold cursor-pointer"
               >
                 {inWatchlist ? "✓ Remove from Watchlist" : "+ Add to Watchlist"}
               </button>
@@ -251,13 +326,13 @@ function viewMore() {
   <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-800/60 to-gray-900/80 rounded-2xl shadow-2xl border border-gray-800" />
 
   {/* Content */}
-  <div className="relative z-10 p-6 md:p-10">
+  <div className="relative z-10 p-6 px-3 md:p-10">
     <h2 className="text-3xl font-extrabold mb-6 text-white tracking-wide flex items-center gap-2">
       <span className="text-pink-500">★</span> Crew
     </h2>
 
     {crew.find((c) => c.job === "Director") && (
-      <p className="text-gray-300 mb-4 text-lg">
+      <p className="text-gray-300 mb-4 text-[1rem]">
         🎬 Directed by{" "}
         <span className="text-white font-medium">
           {crew.find((c) => c.job === "Director").name}
@@ -348,6 +423,51 @@ function viewMore() {
          
         </div>
       )}
+       <div className="px-6 md:px-16 py-8">
+  <h2 className="text-2xl font-bold mb-4 text-white">Comments</h2>
+
+  {currentUser ? (
+    <div className="flex flex-col gap-4">
+      <textarea
+        className="w-full p-4 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-1 focus:ring-indigo-600 transition duration-300"
+        placeholder="Write your comment..."
+              value={commentText}
+              cols='20'
+              rows='3'
+        onChange={(e) => setCommentText(e.target.value)} // updates state as user types
+      />
+      <button
+        onClick={() => handlePostComment()}
+        className="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg font-semibold self-start cursor-pointer"
+      >
+        Post Comment
+      </button>
+    </div>
+  ) : (
+    <p className="text-gray-400">
+      Please log in to post a comment.
+    </p>
+  )}
+      </div>
+      <div className="mt-8 px-4 md:px-16">
+  <h3 className="text-xl font-semibold text-white mb-4">Comments</h3>
+
+  <div className="flex flex-col gap-4">
+    {commentTree.length === 0 && (
+      <p className="text-gray-400">No comments yet. Be the first to comment!</p>
+    )}
+
+    {commentTree.map((c) => (
+      <Comment key={c.id} comment={c} onReply={(newReply) => {
+        setComments((prev) => [...prev, newReply]);
+      }} />
+    ))}
+  </div>
+</div>
+
+
+
+
       <Footer />
     </div>
   );
