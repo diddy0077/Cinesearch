@@ -32,7 +32,7 @@ export default function Hero({ featuredMovies, heroMovieSection }) {
           {heroMovie?.overview}
         </p>
         <div className="mt-4 flex gap-3">
-          <button className="px-4 py-3 bg-red-600 rounded-full hover:bg-red-700 shadow-lg transform hover:scale-105 transition cursor-pointer" onClick={scroll}>
+          <button className="px-4 py-3 text-white font-medium bg-red-600 rounded-full hover:bg-red-700 shadow-lg transform hover:scale-105 transition cursor-pointer" onClick={scroll}>
             ▶ Watch Trailer
           </button>
           <button className="px-7 py-3 bg-gray-800/70 rounded-full hover:bg-gray-700 shadow-lg transform hover:scale-105 transition text-white font-medium cursor-pointer">
