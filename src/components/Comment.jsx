@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Comment({ comment, onReply, isReply = false }) {
+function Comment({ comment, onReply, username, isReply = false }) {
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyText, setReplyText] = useState("");
 
@@ -26,7 +26,10 @@ function Comment({ comment, onReply, isReply = false }) {
           : "bg-gray-800 p-4 rounded-lg"
       }`}
     >
-      <p className="text-white">{comment.text}</p>
+      <div className="flex items-center space-x-2 mb-2">
+        <p className="bg-gray-500 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[1.2rem]">{username ? username[0].toUpperCase() : "A"}</p>
+        <p className="text-white">{comment.text}</p>
+        </div>
 
       <button
         className="text-blue-400 text-xs mt-1"
@@ -41,11 +44,11 @@ function Comment({ comment, onReply, isReply = false }) {
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
             placeholder="Write your reply..."
-            className="w-full p-1 rounded bg-gray-600 text-white text-xs"
+            className="w-full p-1 rounded bg-gray-600 text-white text-xs focus:ring-indigo-600 focus:ring-2 focus:outline-none transition duration-300"
           />
           <button
             onClick={handleReplySubmit}
-            className="mt-1 bg-blue-500 text-white px-2 py-1 text-xs rounded"
+            className="mt-1 bg-blue-500 text-white px-2 py-1 text-xs rounded cursor-pointer"
           >
             Submit
           </button>

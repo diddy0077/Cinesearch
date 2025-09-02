@@ -32,6 +32,7 @@ export default function MovieDetails() {
   const [viewMoreText, setViewMoreText] = useState("View More")
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
+  const [username, setUsername] = useState("");
 
 
   
@@ -202,6 +203,19 @@ export default function MovieDetails() {
   }
 
   const commentTree = buildCommentTree(comments);
+
+  useEffect(() => {
+  if (!currentUser) return;
+  const fetchUser = async () => {
+    const docRef = doc(db, "users", currentUser.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      setUsername(data.firstname || "Anonymous");
+    }
+  };
+  fetchUser();
+}, [currentUser]);
 
 
 function viewMore() {
@@ -458,7 +472,7 @@ function viewMore() {
     )}
 
     {commentTree.map((c) => (
-      <Comment key={c.id} comment={c} onReply={(newReply) => {
+      <Comment key={c.id} username={username} comment={c} onReply={(newReply) => {
         setComments((prev) => [...prev, newReply]);
       }} />
     ))}
