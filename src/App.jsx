@@ -10,7 +10,7 @@ import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import MovieDetails from "./pages/MovieDetails.jsx"; // new file
-
+import Error404 from "./pages/404.jsx";
 
 
 function App() {
@@ -61,7 +61,8 @@ function App() {
               )
             }
           />
-          <Route path="/movie/:id" element={<MovieDetails currentUser={currentUser}/>} />
+          <Route path="/movie/:id" element={<MovieDetails currentUser={currentUser} />} />
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </div>
     </MovieProvider>
